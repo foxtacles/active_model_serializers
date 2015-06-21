@@ -195,10 +195,26 @@ module ActiveModel
 
         serializer_class = ActiveModel::Serializer.serializer_for(association_value, association_options)
 
-        serializer = serializer_class.new(
-          association_value,
-          options.merge(serializer_from_options(association_options))
-        ) if serializer_class
+        if serializer_class
+          begin
+            serializer = serializer_class.new(
+              association_value,
+              options.except(:serializer).merge(serializer_from_options(association_options))
+            )
+          rescue NoMethodError
+            # 1. Failure to serialize an element in a collection, e.g. [ {hi: "Steve" } ] will fail
+            #    with NoMethodError when the ArraySerializer finds no serializer for the hash { hi: "Steve" },
+            #    and tries to call new on that nil.
+            # 2. Convert association_value to hash using implicit as_json
+            # 3. Set as virtual value (serializer is nil)
+            # 4. Consider warning when this happens
+            virtual_value = association_value
+            virtual_value = virtual_value.as_json if virtual_value.respond_to?(:as_json)
+            association_options[:association_options][:virtual_value] = virtual_value
+          end
+        elsif !association_value.nil? && !association_value.instance_of?(Object)
+          association_options[:association_options][:virtual_value] = association_value
+        end
 
         if block_given?
           block.call(name, serializer, association_options[:association_options])

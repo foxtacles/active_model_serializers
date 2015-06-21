@@ -27,7 +27,12 @@ module ActiveModel
             @blog.articles = [@post]
             @post.blog = @blog
             @post_without_comments.blog = nil
+<<<<<<< HEAD
 
+=======
+            @tag = Tag.new(id: 1, name: "#hash_tag")
+            @post.tags = [@tag]
+>>>>>>> cf77786... Fix #955
             @serializer = PostSerializer.new(@post)
             @adapter = ActiveModel::Serializer::Adapter::JsonApi.new(@serializer)
           end
@@ -90,7 +95,12 @@ module ActiveModel
           def test_include_type_for_association_when_different_than_name
             serializer = BlogSerializer.new(@blog)
             adapter = ActiveModel::Serializer::Adapter::JsonApi.new(serializer)
+<<<<<<< HEAD
             actual = adapter.serializable_hash[:data][:links][:articles]
+=======
+            actual = adapter.serializable_hash[:data][:relationships][:articles]
+
+>>>>>>> cf77786... Fix #955
             expected = {
               linkage: [{
                 type: "posts",
@@ -99,6 +109,24 @@ module ActiveModel
             }
             assert_equal expected, actual
           end
+<<<<<<< HEAD
+=======
+
+          def test_has_many_with_no_serializer
+            serializer = PostWithTagsSerializer.new(@post)
+            adapter = ActiveModel::Serializer::Adapter::JsonApi.new(serializer)
+
+            assert_equal({
+              data: {
+                id: "1",
+                type: "posts",
+                relationships: {
+                  tags: {:data=>nil}
+                }
+              }
+            }, adapter.serializable_hash)
+          end
+>>>>>>> cf77786... Fix #955
         end
       end
     end

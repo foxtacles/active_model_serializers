@@ -65,6 +65,17 @@ module ActiveModel
         end
       end
 
+<<<<<<< HEAD
+=======
+      def test_has_many_with_no_serializer
+        PostWithTagsSerializer.new(@post).each_association do |name, serializer, options|
+          assert_equal name, :tags
+          assert_equal serializer, nil
+          assert_equal options, {:virtual_value=>[{"attributes"=>{"name"=>"#hashtagged"}}]}
+        end
+      end
+
+>>>>>>> cf77786... Fix #955
       def test_serializer_options_are_passed_into_associations_serializers
         @post_serializer.each_association do |name, association|
           if name == :comments
