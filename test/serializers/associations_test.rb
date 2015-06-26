@@ -71,7 +71,11 @@ module ActiveModel
         PostWithTagsSerializer.new(@post).each_association do |name, serializer, options|
           assert_equal name, :tags
           assert_equal serializer, nil
+<<<<<<< HEAD
           assert_equal options, {:virtual_value=>[{"attributes"=>{"name"=>"#hashtagged"}}]}
+=======
+          assert_equal [{ attributes: { name: "#hashtagged" }}].to_json, options[:virtual_value].to_json
+>>>>>>> 17d560e... Account for different handling of symbol keys in Rails 4.0
         end
       end
 

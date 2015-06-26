@@ -46,8 +46,12 @@ module ActiveModel
               tags: [
                 {"attributes"=>{"id"=>1, "name"=>"#hash_tag"}}
               ]
+<<<<<<< HEAD
             }, adapter.serializable_hash[:post_with_tags])
 >>>>>>> cf77786... Fix #955
+=======
+            }.to_json, adapter.serializable_hash[:post_with_tags].to_json)
+>>>>>>> 17d560e... Account for different handling of symbol keys in Rails 4.0
           end
         end
       end
