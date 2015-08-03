@@ -124,7 +124,11 @@ module ActiveModel
     end
 
     def json_key
-      @root || object.class.model_name.to_s.downcase
+      begin
+        @root || object.class.model_name.to_s.downcase
+      rescue
+        self.class.root_name
+      end
     end
 
     def id
